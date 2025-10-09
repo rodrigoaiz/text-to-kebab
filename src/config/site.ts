@@ -5,11 +5,11 @@ export const DEFAULT_KEYWORDS = 'kebab-case, slug, slugify, español, acentos, �
 export const DEFAULT_ROBOTS = 'index,follow';
 export const DEFAULT_AUTHOR = 'Rodrigo Aizpuru';
 // Opcional: URL pública del autor (perfil personal, portfolio)
-export const DEFAULT_AUTHOR_URL = 'https://example.com/author/rodrigo-aizpuru';
+export const DEFAULT_AUTHOR_URL = 'https://rodrigo-aizpuru-portfolio.vercel.app';
 // Opcional: array de URLs de redes sociales para JSON-LD sameAs
 export const DEFAULT_AUTHOR_SAMEAS: string[] = [
-  'https://twitter.com/tu_usuario',
-  'https://github.com/tu_usuario'
+  'https://twitter.com/rodrigo.aizpuru',
+  'https://github.com/rodrigoaiz'
 ];
 
 export function defaultImage(site?: string) {
@@ -18,5 +18,5 @@ export function defaultImage(site?: string) {
 }
 
 export function defaultCanonical(site?: string) {
-  return site || 'https://example.com/';
+  return site || 'https://text-to-kebab.vercel.app/';
 }

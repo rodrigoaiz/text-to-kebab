@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap location (will be updated dynamically if SITE is set)
+Sitemap: /sitemap.xml
