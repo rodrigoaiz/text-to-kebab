@@ -16,8 +16,17 @@ const seo = {
 	<main class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-slate-50 px-4 py-8">
 		<div class="max-w-3xl mx-auto">
 			<header class="text-center mb-12">
-				<h1 class="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
-					📝 Text to Kebab Case
+				<h1 class="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent flex items-center justify-center gap-3">
+					<!-- Inline kebab SVG icon -->
+					<svg class="w-10 h-10 flex-shrink-0 kebab-icon" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+						<g transform="rotate(-30 64 64)">
+							<rect x="60" y="8" width="8" height="112" rx="4" fill="#7c3aed" />
+							<rect x="36" y="14" width="40" height="18" rx="6" fill="#c2410c" />
+							<rect x="36" y="36" width="40" height="14" rx="6" fill="#f97316" />
+							<rect x="36" y="54" width="40" height="18" rx="6" fill="#a3e635" />
+						</g>
+					</svg>
+					<span class="leading-tight">Text to Kebab Case</span>
 				</h1>
 				<p class="text-slate-300 text-lg">
 					Convierte texto a kebab-case con soporte completo para español
@@ -104,6 +113,25 @@ const seo = {
 			</div>
 		</div>
 	</main>
+
+	<style>
+		.kebab-icon {
+			display: inline-block;
+			transform-origin: center;
+			animation: kebab-bob 4s ease-in-out infinite;
+		}
+
+		.kebab-icon:hover {
+			animation-play-state: paused;
+			transform: translateY(-6px);
+			transition: transform 160ms ease-out;
+		}
+
+		@keyframes kebab-bob {
+			0%, 100% { transform: translateY(0); }
+			50% { transform: translateY(-4px); }
+		}
+	</style>
 
 	<script>
 		import { textToKebab } from '../utils/textToKebab';
