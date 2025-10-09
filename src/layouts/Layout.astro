@@ -1,18 +1,80 @@
+---
+import { SITE_NAME, DEFAULT_TITLE, DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS, DEFAULT_ROBOTS, DEFAULT_AUTHOR, DEFAULT_AUTHOR_URL, DEFAULT_AUTHOR_SAMEAS, defaultImage, defaultCanonical } from '../config/site';
+
+// Layout con soporte SEO: acepta props desde las páginas.
+const props = Astro.props || {};
+const site = import.meta.env.SITE || '';
+
+const title = props.title || DEFAULT_TITLE;
+const description = props.description || DEFAULT_DESCRIPTION;
+const keywords = props.keywords || DEFAULT_KEYWORDS;
+const robots = props.robots || DEFAULT_ROBOTS;
+const author = props.author || DEFAULT_AUTHOR;
+const canonical = props.canonical || defaultCanonical(site);
+const image = props.image || defaultImage(site);
+const siteName = SITE_NAME;
+const pageUrl = canonical || site || '';
+const twitterCard = image ? 'summary_large_image' : 'summary';
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="keywords" content={keywords} />
+		<meta name="robots" content={robots} />
+	<meta name="generator" content={Astro.generator} />
+	<meta name="author" content={author} />
+
+		{canonical ? <link rel="canonical" href={canonical} /> : null}
+
+		<!-- Open Graph -->
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		{pageUrl ? <meta property="og:url" content={pageUrl} /> : null}
+		{image ? <meta property="og:image" content={image} /> : null}
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content={twitterCard} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		{image ? <meta name="twitter:image" content={image} /> : null}
+
+		<!-- Theme color -->
+		<meta name="theme-color" content="#0f172a" />
+
+		<!-- JSON-LD básico -->
+						<script type="application/ld+json">
+							{JSON.stringify({
+								"@context": "https://schema.org",
+								"@type": "WebSite",
+								"name": siteName,
+								"url": pageUrl || undefined,
+								"description": description,
+								"author": {
+									"@type": "Person",
+									"name": author,
+									...(DEFAULT_AUTHOR_URL ? { url: DEFAULT_AUTHOR_URL } : {}),
+									...(Array.isArray(DEFAULT_AUTHOR_SAMEAS) && DEFAULT_AUTHOR_SAMEAS.length ? { sameAs: DEFAULT_AUTHOR_SAMEAS } : {})
+								}
+							})}
+						</script>
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
 
-<style>
+<style is:global>
+	@import "tailwindcss";
+    
 	html,
 	body {
 		margin: 0;
