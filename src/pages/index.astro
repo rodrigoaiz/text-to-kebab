@@ -46,18 +46,63 @@ const seo = {
 					></textarea>
 				</div>
 
-				<div class="mb-6">
-					<label for="output-text" class="block mb-2 font-semibold text-slate-50">
-						Resultado en kebab-case
+			<!-- Controles -->
+			<div class="mb-6">
+				<div class="flex flex-col lg:flex-row gap-4 items-start lg:items-end">
+					<!-- Selector de formato -->
+					<div class="flex-1 w-full lg:w-auto min-w-[200px]">
+						<label for="format-select" class="block mb-2 font-semibold text-slate-50">Formato</label>
+						<select id="format-select" class="w-full px-3 py-2 bg-slate-900 text-slate-50 border-2 border-slate-600 rounded-lg focus:outline-none focus:border-indigo-500">
+							<option value="kebab">kebab-case</option>
+							<option value="snake">snake_case</option>
+							<option value="camel">camelCase</option>
+							<option value="pascal">PascalCase</option>
+							<option value="lower">lowercase</option>
+							<option value="upper">UPPERCASE</option>
+						</select>
+					</div>
+					<!-- Checkboxes en línea -->
+					<div class="flex flex-col sm:flex-row gap-3 sm:gap-4 flex-wrap">
+						<label class="inline-flex items-center gap-2 select-none cursor-pointer">
+							<input id="ascii-mode" type="checkbox" class="w-4 h-4 accent-indigo-600 cursor-pointer" checked />
+							<span class="text-slate-200 text-sm">Quitar acentos/ñ</span>
+						</label>
+						<label class="inline-flex items-center gap-2 select-none cursor-pointer">
+							<input id="remove-stopwords" type="checkbox" class="w-4 h-4 accent-indigo-600 cursor-pointer" />
+							<span class="text-slate-200 text-sm">Omitir artículos</span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="mb-6">
+				<div class="flex items-center justify-between mb-2">
+					<label for="output-text" class="font-semibold text-slate-50">
+						Resultado
+						<small id="format-hint" class="ml-2 text-slate-400 font-normal">kebab-case</small>
 					</label>
-					<div class="relative">
-						<textarea 
-							id="output-text" 
-							readonly 
-							placeholder="El resultado aparecerá aquí..."
-							rows="6"
-							class="w-full px-4 py-3 bg-slate-900 text-slate-50 border-2 border-slate-600 rounded-lg font-mono resize-y focus:outline-none placeholder:text-slate-500"
-						></textarea>
+					<!-- Tooltip de ayuda -->
+					<button 
+						id="help-btn"
+						type="button"
+						class="relative group"
+						aria-label="Ver ejemplos"
+					>
+						<svg class="w-6 h-6 text-slate-400 hover:text-indigo-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<circle cx="12" cy="12" r="10" stroke-width="2"/>
+							<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke-width="2" stroke-linecap="round"/>
+							<circle cx="12" cy="17" r=".5" fill="currentColor"/>
+						</svg>
+					</button>
+				</div>
+				<div class="relative">
+					<textarea 
+						id="output-text" 
+						readonly 
+						placeholder="El resultado aparecerá aquí..."
+						rows="6"
+						class="w-full px-4 py-3 bg-slate-900 text-slate-50 border-2 border-slate-600 rounded-lg font-mono resize-y focus:outline-none placeholder:text-slate-500"
+					></textarea>
 						<button 
 							id="copy-btn" 
 							class="absolute top-2 right-2 bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-md transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center"
@@ -81,35 +126,60 @@ const seo = {
 				</div>
 			</div>
 
-			<div class="bg-slate-800 p-6 md:p-8 rounded-xl border border-slate-700">
-				<h3 class="text-xl font-bold mb-4 text-indigo-400">Ejemplos:</h3>
-				<ul class="space-y-2">
-					<li class="text-slate-300">
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"Año Nuevo"</code> 
-						→ 
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"ano-nuevo"</code>
-					</li>
-					<li class="text-slate-300">
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"Niño con piñata"</code> 
-						→ 
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"nino-con-pinata"</code>
-					</li>
-					<li class="text-slate-300">
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"Menú del día"</code> 
-						→ 
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"menu-del-dia"</code>
-					</li>
-					<li class="text-slate-300">
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"¿Cómo estás?"</code> 
-						→ 
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"como-estas"</code>
-					</li>
-					<li class="text-slate-300">
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"Configuración avanzada"</code> 
-						→ 
-						<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"configuracion-avanzada"</code>
-					</li>
-				</ul>
+			<!-- Popup de ayuda -->
+			<div 
+				id="help-popup" 
+				class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+			>
+				<div class="bg-slate-800 rounded-xl border border-slate-700 p-6 md:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl">
+					<div class="flex items-center justify-between mb-4">
+						<h3 class="text-xl font-bold text-indigo-400">Ejemplos de uso</h3>
+						<button 
+							id="close-help-btn"
+							type="button"
+							class="text-slate-400 hover:text-slate-200 transition-colors"
+							aria-label="Cerrar"
+						>
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+							</svg>
+						</button>
+					</div>
+					<ul class="space-y-2">
+						<li class="text-slate-300">
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"Año Nuevo"</code> 
+							→ 
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"ano-nuevo"</code>
+						</li>
+						<li class="text-slate-300">
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"Niño con piñata"</code> 
+							→ 
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"nino-con-pinata"</code>
+						</li>
+						<li class="text-slate-300">
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"Menú del día"</code> 
+							→ 
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"menu-del-dia"</code>
+						</li>
+						<li class="text-slate-300">
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"¿Cómo estás?"</code> 
+							→ 
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"como-estas"</code>
+						</li>
+						<li class="text-slate-300">
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"Configuración avanzada"</code> 
+							→ 
+							<code class="bg-slate-900 px-2 py-1 rounded text-slate-50 font-mono">"configuracion-avanzada"</code>
+						</li>
+					</ul>
+					<div class="mt-6 p-4 bg-slate-900 rounded-lg">
+						<p class="text-sm text-slate-300">
+							<strong class="text-indigo-400">Opciones:</strong><br>
+							• <strong>Quitar acentos/ñ:</strong> Convierte á→a, é→e, ñ→n (ideal para URLs)<br>
+							• <strong>Omitir artículos:</strong> Elimina palabras como: el, la, de, del, con, en, etc.
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</main>
@@ -134,18 +204,47 @@ const seo = {
 	</style>
 
 	<script>
-		import { textToKebab } from '../utils/textToKebab';
+		import { transformText } from '../utils/textToKebab';
 
 		const inputText = document.getElementById('input-text') as HTMLTextAreaElement;
 		const outputText = document.getElementById('output-text') as HTMLTextAreaElement;
+		const formatSelect = document.getElementById('format-select') as HTMLSelectElement;
+		const removeStopwords = document.getElementById('remove-stopwords') as HTMLInputElement;
+		const asciiMode = document.getElementById('ascii-mode') as HTMLInputElement;
+		const formatHint = document.getElementById('format-hint') as HTMLElement;
 		const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
 		const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
+		const helpBtn = document.getElementById('help-btn') as HTMLButtonElement;
+		const helpPopup = document.getElementById('help-popup') as HTMLDivElement;
+		const closeHelpBtn = document.getElementById('close-help-btn') as HTMLButtonElement;
+
+		function updateOutput() {
+			const fmt = (formatSelect?.value ?? 'kebab') as any;
+			const omit = Boolean(removeStopwords?.checked);
+			const val = inputText.value;
+			const result = transformText(val, { case: fmt, removeStopwords: omit, ascii: Boolean(asciiMode?.checked) });
+			outputText.value = result;
+			if (formatHint) {
+				const hintMap: Record<string,string> = {
+					kebab: 'kebab-case',
+					snake: 'snake_case',
+					camel: 'camelCase',
+					pascal: 'PascalCase',
+					lower: 'lowercase',
+					upper: 'UPPERCASE',
+				};
+				formatHint.textContent = hintMap[fmt] ?? 'kebab-case';
+			}
+		}
 
 		// Convertir texto en tiempo real
-		inputText.addEventListener('input', () => {
-			const result = textToKebab(inputText.value);
-			outputText.value = result;
-		});
+		inputText.addEventListener('input', updateOutput);
+		formatSelect?.addEventListener('change', updateOutput);
+		removeStopwords?.addEventListener('change', updateOutput);
+		asciiMode?.addEventListener('change', updateOutput);
+
+		// Initialize on load
+		updateOutput();
 
 		// Copiar al portapapeles
 		copyBtn.addEventListener('click', async () => {
@@ -181,6 +280,25 @@ const seo = {
 			inputText.value = '';
 			outputText.value = '';
 			inputText.focus();
+		});
+
+		// Modal de ayuda
+		helpBtn?.addEventListener('click', () => {
+			helpPopup?.classList.remove('hidden');
+			helpPopup?.classList.add('flex');
+		});
+
+		closeHelpBtn?.addEventListener('click', () => {
+			helpPopup?.classList.remove('flex');
+			helpPopup?.classList.add('hidden');
+		});
+
+		// Cerrar al hacer clic fuera del modal
+		helpPopup?.addEventListener('click', (e) => {
+			if (e.target === helpPopup) {
+				helpPopup.classList.remove('flex');
+				helpPopup.classList.add('hidden');
+			}
 		});
 	</script>
 </Layout>

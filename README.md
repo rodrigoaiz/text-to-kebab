@@ -9,12 +9,13 @@ Una herramienta simple y eficaz para convertir texto a kebab-case con **soporte 
 - 📋 **Copiar al portapapeles**: Un clic para copiar el resultado
 - 🎨 **Interfaz moderna**: Diseño limpio y fácil de usar
 - 🌙 **Tema oscuro**: Cómodo para la vista
+- 🧩 **Opciones**: Elige el formato de salida (kebab, snake, camel, Pascal, lower, UPPER), opcionalmente omite artículos/preposiciones y decide si quieres mantener los acentos/ñ o convertir a ASCII
 
 ## 🎯 Casos de uso
 
 Perfecto para crear nombres de archivos, URLs, slugs, y más:
 
-```
+```text
 "Año Nuevo"              → "ano-nuevo"
 "Niño con piñata"        → "nino-con-pinata"
 "Menú del día"           → "menu-del-dia"
@@ -48,13 +49,37 @@ npm run preview
 
 ## 📖 Cómo funciona
 
-La función de conversión:
+La función de conversión por defecto (kebab-case):
 
 1. **Normaliza caracteres españoles**: Convierte á→a, é→e, í→i, ó→o, ú→u, ü→u, ñ→n
 2. **Convierte a minúsculas**: Todo el texto se normaliza
 3. **Reemplaza espacios**: Los espacios y guiones bajos se convierten en guiones
 4. **Limpia caracteres especiales**: Elimina todo excepto letras, números y guiones
 5. **Normaliza guiones**: Elimina guiones duplicados y los del inicio/final
+
+Además, ahora dispones de una API flexible:
+
+```ts
+import { transformText } from './src/utils/textToKebab';
+
+// Formatos disponibles: 'kebab' | 'snake' | 'camel' | 'pascal' | 'lower' | 'upper'
+// Por defecto ascii=true (quita acentos y ñ)
+transformText('Menú del día', { case: 'kebab' }); // "menu-del-dia"
+// Preservando acentos y ñ
+transformText('Menú del día', { case: 'kebab', ascii: false }); // "menú-del-día"
+transformText('caja de cosas', { case: 'camel', removeStopwords: true }); // "cajaCosas"
+transformText('caja de cosas', { case: 'pascal', removeStopwords: true }); // "CajaCosas"
+transformText('¿Cómo estás?', { case: 'snake' }); // "como_estas"
+// upper/lower preservan acentos si ascii=false
+transformText('AÑO NUEVO', { case: 'lower', ascii: false }); // "año nuevo"
+transformText('año nuevo', { case: 'upper', ascii: false }); // "AÑO NUEVO"
+```
+
+En la UI puedes:
+
+- Seleccionar el formato de salida.
+- Activar "Omitir artículos y preposiciones" para filtrar palabras como: el, la, los, las, un, una, de, del, al, a, con, en, y, o, etc.
+- Activar "Quitar acentos/ñ (ASCII)" (por defecto activado). Si lo desactivas, se preservan caracteres españoles en todos los formatos (especialmente útil en UPPERCASE/lowercase).
 
 ## 📝 Licencia
 
