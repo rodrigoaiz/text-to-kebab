@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://text-to-kebab.vercel.app',
   vite: {
     plugins: [tailwindcss()]
   }
